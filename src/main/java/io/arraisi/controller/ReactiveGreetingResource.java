@@ -1,4 +1,4 @@
-package io.arraisi;
+package io.arraisi.controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

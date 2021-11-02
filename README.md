@@ -4,6 +4,19 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+## Setup Database
+    ```
+    docker run --rm --name \
+    quarkus-reactive-db \
+    -e MYSQL_DATABASE=quarkus-react \
+    -e MYSQL_USER=react \
+    -e MYSQL_PASSWORD=secret \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -v "$PWD/datadir:/var/lib/mysql" \
+    -p 127.0.0.1:3306:3306 \
+    mysql:8
+    ```
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
