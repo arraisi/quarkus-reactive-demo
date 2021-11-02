@@ -12,9 +12,9 @@ If you want to learn more about Quarkus, please visit its website: https://quark
     -e MYSQL_USER=react \
     -e MYSQL_PASSWORD=secret \
     -e MYSQL_ROOT_PASSWORD=secret \
-    -v "$PWD/datadir:/var/lib/mysql" \
+    -v "$PWD/mariadb-data:/var/lib/mysql" \
     -p 127.0.0.1:3306:3306 \
-    mysql:8
+    mariadb:10
     ```
 
 ## Running the application in dev mode

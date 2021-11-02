@@ -30,7 +30,11 @@ public class FruitController {
 
     @POST
     public Uni<Response> create(Fruit fruit) {
-        return Panache.<Fruit>withTransaction(fruit::persist)
+        return Panache.<Fruit>withTransaction(() -> {
+                    fruit.name = "test";
+
+                    return fruit.persist();
+                })
                 .onItem().transform(inserted -> Response.created(URI.create("/fruits/" + inserted.id)).build());
     }
 }
