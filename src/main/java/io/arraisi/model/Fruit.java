@@ -3,6 +3,7 @@ package io.arraisi.model;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.groups.MultiCollect;
 import io.vertx.mutiny.mysqlclient.MySQLPool;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.List;
 
 @Slf4j
 @Entity
@@ -30,17 +32,27 @@ public class Fruit extends PanacheEntity {
     }
 
     public static Multi<Fruit> findAll(MySQLPool client) {
-        return client.query("SELECT id, name FROM Fruit ORDER BY name ASC")
-                .execute()
+        StringBuilder query = new StringBuilder("SELECT id, name FROM Fruit ORDER BY name ASC");
+        return client.query(query.toString()).execute()
                 // Create a Multi from the set of rows:
-                .onItem()
-                .transformToMulti(set -> {
-                    Multi<Row> iterable = Multi.createFrom().iterable(set);
-                    log.info("iterable set: {}", iterable.onItem().transform(Fruit::from));
-                    return Multi.createFrom().iterable(set);
-                })
+                .onItem().transformToMulti(set -> Multi.createFrom().iterable(set))
                 // For each row create a fruit instance
                 .onItem().transform(Fruit::from);
+    }
+
+    public static Uni<List<Fruit>> list(MySQLPool client) {
+        StringBuilder query = new StringBuilder("SELECT id, name FROM Fruit ORDER BY name ASC");
+        return client.query(query.toString()).execute()
+                .onItem().transformToMulti(set -> {
+                    log.info("list set: {}", set);
+                    log.info("list set.value: {}", set.iterator());
+                    Multi<Row> iterable = Multi.createFrom().iterable(set);
+                    Multi<Fruit> transform = iterable.onItem().transform(Fruit::from);
+                    Uni<List<Fruit>> listUni = transform.collect().asList();
+//                    listUni.convert().toPublisher().subscribe();
+                    return Multi.createFrom().iterable(set);
+                })
+                .onItem().transform(Fruit::from).collect().asList();
     }
 
     public static Uni<Fruit> findById(MySQLPool client, Long id) {
