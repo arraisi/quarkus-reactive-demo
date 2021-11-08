@@ -7,9 +7,9 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 ## Setup Database
     ```
     docker run --rm --name \
-    quarkus-reactive-db \
-    -e MYSQL_DATABASE=quarkus-react \
-    -e MYSQL_USER=react \
+    quarkus-reactive-theta-db \
+    -e MYSQL_DATABASE=quarkus-theta \
+    -e MYSQL_USER=theta \
     -e MYSQL_PASSWORD=secret \
     -e MYSQL_ROOT_PASSWORD=secret \
     -v "$PWD/mariadb-data:/var/lib/mysql" \
