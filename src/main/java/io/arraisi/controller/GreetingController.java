@@ -1,5 +1,6 @@
 package io.arraisi.controller;
 
+import io.arraisi.model.Fruit;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,15 @@ public class GreetingController {
 
     @GET
     @Path("/ping")
+    public Uni<String> ping() {
+        return Fruit.listAll()
+                .map(entityBases -> entityBases.isEmpty() ? "error" : "ok");
+    }
+
+    @GET
+    @Path("/stream/test")
     @Produces(MediaType.APPLICATION_JSON_PATCH_JSON)
-    public Multi<Integer> ping() {
+    public Multi<Integer> streamTest() {
         return Multi.createFrom().items(1, 2, 3, 4, 5)
                 .onItem().call(i -> {
                     log.info("Ping i: {}", i);
@@ -37,10 +45,8 @@ public class GreetingController {
         Uni<String> hello = Uni.createFrom().item("hello")
                 .onItem().transform(item -> item + " mutiny")
                 .onItem().transform(String::toUpperCase);
-
         hello.subscribe().with(
                 item -> System.out.println("subscribe hello item >> " + item));
-
         return hello;
     }
 }

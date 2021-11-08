@@ -1,16 +1,26 @@
 package io.arraisi.controller;
 
 import io.arraisi.model.Person;
+import io.arraisi.service.PersonService;
+import io.quarkus.hibernate.reactive.panache.Panache;
+import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.tuples.Tuple2;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.inject.Inject;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.util.List;
+
+import static io.arraisi.model.Person.toDecorator;
+import static javax.ws.rs.core.Response.ResponseBuilder;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Slf4j
 @Path("/person")
@@ -19,18 +29,89 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonController {
 
+    @Inject
+    PersonService personService;
+
+    @POST
+    public Uni<Response> save(Person person) {
+        return Panache.withTransaction(() -> personService.persist(toDecorator(person)))
+                .map(created -> Response.created(URI.create("/person" + created.getId())).build());
+    }
+
+    @PUT
+    public Uni<Response> update(Person person) {
+        if (person.getId() == null) {
+            return Uni.createFrom().item(Response.status(BAD_REQUEST))
+                    .map(ResponseBuilder::build);
+        }
+        return Panache.withTransaction(() -> personService.update(toDecorator(person)))
+                .map(created -> Response.ok(created).build());
+    }
+
     @GET
     @Path("/{id}")
-    public Uni<Person> personById(Long id) {
-        return Person.findById(id)
-                .onItem().transform(Person::fromDecorator);
+    public Uni<Response> personById(Long id) {
+        return personService.findById(id)
+                .map(person -> person == null ? Response.status(NOT_FOUND) : Response.ok(Person.fromDecorator(person)))
+                .map(ResponseBuilder::build);
     }
 
     @GET
     @Path("/list")
-    public Multi<Person> findAll() {
-        return Person.listAll()
+    public Multi<Person> list() {
+        return personService.listAll()
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
-                .onItem().transform(Person::fromDecorator);
+                .map(Person::fromDecorator);
+    }
+
+    @GET
+    @Path("/list/sort/name")
+    public Uni<List<Person>> listSoreByName() {
+        return personService.listAll(Sort.by("name"));
+    }
+
+    @GET
+    @Path("/list/active")
+    public Multi<Person> listActive() {
+        return personService.list("active", true)
+                .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
+                .map(Person::fromDecorator);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Uni<Response> delete(@PathParam("id") Long id) {
+        return Panache.withTransaction(() -> personService.deleteById(id)
+                .map(deleted -> deleted ? Response.noContent() : Response.notModified())
+                .map(ResponseBuilder::build));
+    }
+
+    @GET
+    @Path("/datatables")
+    public Uni<Tuple2<List<Person>, Long>> datatables(@QueryParam("pageIndex") Integer pageIndex, @QueryParam("pageSize") Integer pageSize) {
+        return Panache.withTransaction(() -> Uni.combine().all()
+                .unis(personService.findAll().page(pageIndex, pageSize).list()
+                                .onItem().transformToMulti(entityBases -> Multi.createFrom().iterable(entityBases))
+                                .map(Person::fromDecorator).collect().asList(),
+                        personService.count())
+                .asTuple());
+    }
+
+    @GET
+    @Path("/query/{id}")
+    public Uni<Person> queryUniById(Long id) {
+        return personService.queryFindById(id);
+    }
+
+    @GET
+    @Path("/query/list")
+    public Multi<Person> queryMultiListAll() {
+        return personService.queryPersonMultiList();
+    }
+
+    @GET
+    @Path("/query/uni/list")
+    public Uni<List<Person>> queryUniListAll() {
+        return personService.queryPersonUniList();
     }
 }

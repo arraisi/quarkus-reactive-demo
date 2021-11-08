@@ -7,10 +7,12 @@ create table fruit
 
 create table person
 (
-    id      bigint not null,
-    address varchar(255),
-    birth   date,
-    name    varchar(255),
+    id       bigint not null,
+    name     varchar(255),
+    birth    date,
+    email    varchar(255),
+    password varchar(255),
+    active   bit(1),
     primary key (id)
 ) engine = InnoDB;
 
@@ -64,10 +66,21 @@ VALUES (2, 'Apple');
 INSERT INTO fruit(id, name)
 VALUES (3, 'Banana');
 
-insert into person(id, address, birth, name)
-VALUES (1, 'Bandung', '1994-08-16', 'Abdul');
-insert into person(id, address, birth, name)
-VALUES (2, 'Bandung', '2020-11-27', 'Kiya');
+insert into person(id, name, email, password, birth, active)
+VALUES (1, 'Abdul', 'abdul@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
+', '2020-08-16', 1);
+insert into person(id, name, email, password, birth, active)
+VALUES (2, 'Dewi', 'dewi@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
+', '1996-08-16', 1);
+insert into person(id, name, email, password, birth, active)
+VALUES (3, 'Azkiya', 'azkiya@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
+', '2020-08-16', 1);
+insert into person(id, name, email, password, birth, active)
+VALUES (4, 'Syarah', 'syarah@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
+', '2020-08-16', 1);
+insert into person(id, name, email, password, birth, active)
+VALUES (5, 'Rahman', 'rahman@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
+', '1994-08-16', 1);
 
 insert into role(id, name)
 VALUES (1, 'admin');
