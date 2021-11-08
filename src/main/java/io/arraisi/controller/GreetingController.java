@@ -1,11 +1,12 @@
 package io.arraisi.controller;
 
-import io.arraisi.model.Fruit;
+import io.arraisi.service.FruitService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,10 +21,13 @@ import java.time.Duration;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GreetingController {
 
+    @Inject
+    FruitService fruitService;
+
     @GET
     @Path("/ping")
     public Uni<String> ping() {
-        return Fruit.listAll()
+        return fruitService.listAll()
                 .map(entityBases -> entityBases.isEmpty() ? "error" : "ok");
     }
 

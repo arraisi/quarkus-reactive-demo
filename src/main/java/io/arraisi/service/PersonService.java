@@ -1,5 +1,6 @@
 package io.arraisi.service;
 
+import io.arraisi.helper.Decorator;
 import io.arraisi.model.Person;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Multi;
@@ -14,10 +15,28 @@ import javax.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
-public class PersonService implements PanacheRepository<Person> {
+public class PersonService extends BaseService implements PanacheRepository<Person> {
 
     @Inject
     MySQLPool client;
+
+    public static final Decorator<Person> toDecorator = new Decorator<Person>() {
+        public Person decorate(Person entity) {
+            if (entity != null) {
+                toDecorate(entity);
+            }
+            return entity;
+        }
+    };
+
+    public static final Decorator<Person> fromDecorator = new Decorator<Person>() {
+        public Person decorate(Person entity) {
+            if (entity != null) {
+                fromDecorate(entity);
+            }
+            return entity;
+        }
+    };
 
     public Uni<Long> rowCount() {
         return client.query("SELECT count(*) as rowCount FROM Person").execute()

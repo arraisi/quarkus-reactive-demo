@@ -17,7 +17,8 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
-import static io.arraisi.model.Person.toDecorator;
+import static io.arraisi.service.PersonService.fromDecorator;
+import static io.arraisi.service.PersonService.toDecorator;
 import static javax.ws.rs.core.Response.ResponseBuilder;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -34,7 +35,7 @@ public class PersonController {
 
     @POST
     public Uni<Response> save(Person person) {
-        return Panache.withTransaction(() -> personService.persist(toDecorator(person)))
+        return Panache.withTransaction(() -> personService.persist(toDecorator.decorate(person)))
                 .map(created -> Response.created(URI.create("/person" + created.getId())).build());
     }
 
@@ -44,7 +45,7 @@ public class PersonController {
             return Uni.createFrom().item(Response.status(BAD_REQUEST))
                     .map(ResponseBuilder::build);
         }
-        return Panache.withTransaction(() -> personService.update(toDecorator(person)))
+        return Panache.withTransaction(() -> personService.update(toDecorator.decorate(person)))
                 .map(created -> Response.ok(created).build());
     }
 
@@ -52,7 +53,7 @@ public class PersonController {
     @Path("/{id}")
     public Uni<Response> personById(Long id) {
         return personService.findById(id)
-                .map(person -> person == null ? Response.status(NOT_FOUND) : Response.ok(Person.fromDecorator(person)))
+                .map(person -> person == null ? Response.status(NOT_FOUND) : Response.ok(fromDecorator.decorate(person)))
                 .map(ResponseBuilder::build);
     }
 
@@ -61,7 +62,7 @@ public class PersonController {
     public Multi<Person> list() {
         return personService.listAll()
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
-                .map(Person::fromDecorator);
+                .map(fromDecorator::decorate);
     }
 
     @GET
@@ -75,7 +76,7 @@ public class PersonController {
     public Multi<Person> listActive() {
         return personService.list("active", true)
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
-                .map(Person::fromDecorator);
+                .map(fromDecorator::decorate);
     }
 
     @DELETE
@@ -91,9 +92,9 @@ public class PersonController {
     public Uni<Tuple2<List<Person>, Long>> datatables(@QueryParam("pageIndex") Integer pageIndex, @QueryParam("pageSize") Integer pageSize) {
         return Panache.withTransaction(() -> Uni.combine().all()
                 .unis(personService.findAll().page(pageIndex, pageSize).list()
-                                .onItem().transformToMulti(entityBases -> Multi.createFrom().iterable(entityBases))
-                                .map(Person::fromDecorator).collect().asList(),
-                        personService.count())
+                        .onItem().transformToMulti(persons -> Multi.createFrom().iterable(persons))
+                        .map(fromDecorator::decorate).collect().asList(),
+                personService.count())
                 .asTuple());
     }
 
