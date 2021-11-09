@@ -1,6 +1,7 @@
 package io.arraisi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.arraisi.helper.Utility;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -39,4 +40,16 @@ public class BaseModel {
     protected String transitMapData;
     @Transient
     protected Map<String, Object> transitMap = new HashMap<>();
+
+    public void createdBy() {
+        created = Utility.now();
+//        setCreatorId(principal.getId());
+//        setCreator(Utility.gson.toJson(principal.essence()));
+    }
+
+    public void updatedBy() {
+        this.updated = Utility.now();
+//        setEditorId(principal.getId());
+//        setEditor(Utility.gson.toJson(principal.essence()));
+    }
 }

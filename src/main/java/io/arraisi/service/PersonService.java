@@ -45,8 +45,21 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
     }
 
     public Uni<Boolean> update(Person person) {
-        return client.preparedQuery("UPDATE Person SET name = ?, birth = ?, mapData = ? WHERE id = ?")
-                .execute(Tuple.of(person.getName(), person.getBirth(), person.getMapData(), person.getId()))
+        return client.preparedQuery("UPDATE Person SET " +
+                "name = ?, " +
+                "birth = ?, " +
+                "mapData = ?, " +
+                "editor = ?, " +
+                "updated = ?, " +
+                "updatedBy = ? " +
+                "WHERE id = ?")
+                .execute(Tuple.from(new Object[]{person.getName(),
+                        person.getBirth(),
+                        person.getMapData(),
+                        person.getEditor(),
+                        person.getUpdated(),
+                        person.getUpdatedBy(),
+                        person.getId()}))
                 .onItem().transform(rowSet -> rowSet.rowCount() == 1);
     }
 

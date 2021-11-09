@@ -35,6 +35,7 @@ public class PersonController {
 
     @POST
     public Uni<Response> save(Person person) {
+        person.createdBy();
         return Panache.withTransaction(() -> personService.persist(toDecorator.decorate(person)))
                 .map(created -> Response.created(URI.create("/person" + created.getId())).build());
     }
@@ -45,6 +46,7 @@ public class PersonController {
             return Uni.createFrom().item(Response.status(BAD_REQUEST))
                     .map(ResponseBuilder::build);
         }
+        person.updatedBy();
         return Panache.withTransaction(() -> personService.update(toDecorator.decorate(person)))
                 .map(created -> Response.ok(created).build());
     }

@@ -53,6 +53,10 @@ public class Utility {
 
     public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public static LocalDateTime now() {
+        return LocalDateTime.now();
+    }
+
     public static LocalDateTime retrieveDate(Map<String, Object> dataMap, String key, int hour, int minute, int second) {
         if (dataMap != null) {
             String text = (String) dataMap.get(key);
