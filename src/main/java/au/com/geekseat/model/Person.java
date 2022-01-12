@@ -26,6 +26,7 @@ public class Person extends BaseModel {
     @JsonProperty(access = WRITE_ONLY)
     private String password;
     private Boolean active = true;
+
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "person_role",
             joinColumns = @JoinColumn(name = "person_id"),

@@ -23,6 +23,10 @@ insert into person(id, name, email, password, birth, active)
 VALUES (5, 'Rahman', 'rahman@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl88baFac30XUkU8DCNHhQnm
 ', '1994-08-16', 1);
 
+DELETE FROM pocket WHERE 1=1;
+insert into pocket(id, name, balance, person_id)
+VALUES (1, 'ewallet', 10000, 1);
+
 DELETE FROM role WHERE 1=1;
 insert into role(id, name)
 VALUES (1, 'admin');
@@ -41,16 +45,20 @@ VALUES (1, 2);
 insert into person_role(person_id, role_id)
 VALUES (1, 3);
 
-DELETE FROM shop WHERE 1=1;
-insert into shop(id, name)
-VALUES (1, 'Shop-001');
-
 DELETE FROM product WHERE 1=1;
-insert into product(id, name, quantity, shop_id)
-values (1, 'Product-001', 3, 1);
-insert into product(id, name, quantity, shop_id)
-values (2, 'Product-002', 2, 1);
-insert into product(id, name, quantity, shop_id)
-values (3, 'Product-003', 1, 1);
+insert into product(id, name, quantity, price)
+values (1, 'Product-001', 3, 50);
+insert into product(id, name, quantity, price)
+values (2, 'Product-002', 2, 100);
+insert into product(id, name, quantity, price)
+values (3, 'Product-003', 1, 200);
+
+DELETE FROM shop WHERE 1=1;
+insert into shop(id, invoiceNumber, quantity, product_id)
+VALUES (1, 1001, 2, 1);
+insert into shop(id, invoiceNumber, quantity, product_id)
+VALUES (2, 1001, 2, 1);
+insert into shop(id, invoiceNumber, quantity, product_id)
+VALUES (3, 1001, 2, 1);
 
 

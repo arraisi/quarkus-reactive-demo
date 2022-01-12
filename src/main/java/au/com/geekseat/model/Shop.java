@@ -6,11 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.EAGER;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +13,11 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Table(name = "shop")
 public class Shop extends BaseModel {
-    private String name;
-    @OneToMany(mappedBy = "shop", cascade = ALL, fetch = EAGER)
+    private Integer invoiceNumber;
+    private Integer quantity;
+
+    @OneToOne
+    @JoinColumn(name = "product_id")
     @JsonIgnoreProperties("shop")
-    private List<Product> products = new ArrayList<>();
+    private Product product;
 }

@@ -21,6 +21,7 @@ public class Role {
     @GeneratedValue
     private Long id;
     private String name;
+
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "person_role",
             joinColumns = @JoinColumn(name = "role_id"),
