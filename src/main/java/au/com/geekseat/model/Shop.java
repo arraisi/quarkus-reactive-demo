@@ -1,4 +1,4 @@
-package io.arraisi.model;
+package au.com.geekseat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

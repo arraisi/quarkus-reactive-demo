@@ -1,4 +1,4 @@
-package io.arraisi.helper;
+package au.com.geekseat.helper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

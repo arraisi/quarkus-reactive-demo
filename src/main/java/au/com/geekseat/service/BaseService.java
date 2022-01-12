@@ -1,7 +1,7 @@
-package io.arraisi.service;
+package au.com.geekseat.service;
 
-import io.arraisi.helper.Utility;
-import io.arraisi.model.BaseModel;
+import au.com.geekseat.helper.Utility;
+import au.com.geekseat.model.BaseModel;
 
 public class BaseService {
     public static void toDecorate(BaseModel entity) {

@@ -1,7 +1,7 @@
-package io.arraisi.controller;
+package au.com.geekseat.controller;
 
-import io.arraisi.model.Person;
-import io.arraisi.service.PersonService;
+import au.com.geekseat.model.Person;
+import au.com.geekseat.service.PersonService;
 import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Multi;
@@ -17,8 +17,8 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
-import static io.arraisi.service.PersonService.fromDecorator;
-import static io.arraisi.service.PersonService.toDecorator;
+import static au.com.geekseat.service.PersonService.fromDecorator;
+import static au.com.geekseat.service.PersonService.toDecorator;
 import static javax.ws.rs.core.Response.ResponseBuilder;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;

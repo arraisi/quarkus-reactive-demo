@@ -1,4 +1,4 @@
-package io.arraisi.helper;
+package au.com.geekseat.helper;
 
 public class Decorator<T> {
 

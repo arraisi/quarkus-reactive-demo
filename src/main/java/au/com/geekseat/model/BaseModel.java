@@ -1,9 +1,8 @@
-package io.arraisi.model;
+package au.com.geekseat.model;
 
+import au.com.geekseat.helper.Utility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.arraisi.helper.Utility;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

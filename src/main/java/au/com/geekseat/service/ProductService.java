@@ -1,6 +1,6 @@
-package io.arraisi.service;
+package au.com.geekseat.service;
 
-import io.arraisi.model.Product;
+import au.com.geekseat.model.Product;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;

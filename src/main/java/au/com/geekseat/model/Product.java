@@ -1,7 +1,6 @@
-package io.arraisi.model;
+package au.com.geekseat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

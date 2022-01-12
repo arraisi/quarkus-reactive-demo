@@ -1,6 +1,6 @@
-package io.arraisi.controller;
+package au.com.geekseat.controller;
 
-import io.arraisi.model.Fruit;
+import au.com.geekseat.model.Fruit;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;

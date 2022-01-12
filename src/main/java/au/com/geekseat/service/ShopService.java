@@ -1,10 +1,10 @@
-package io.arraisi.service;
+package au.com.geekseat.service;
 
-import io.arraisi.model.Role;
+import au.com.geekseat.model.Shop;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class RoleService implements PanacheRepository<Role> {
+public class ShopService implements PanacheRepository<Shop> {
 }

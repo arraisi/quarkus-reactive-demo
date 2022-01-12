@@ -1,4 +1,4 @@
-package io.arraisi;
+package au.com.geekseat;
 
 import io.quarkus.test.junit.NativeImageTest;
 

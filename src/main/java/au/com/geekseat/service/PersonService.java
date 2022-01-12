@@ -1,7 +1,7 @@
-package io.arraisi.service;
+package au.com.geekseat.service;
 
-import io.arraisi.helper.Decorator;
-import io.arraisi.model.Person;
+import au.com.geekseat.helper.Decorator;
+import au.com.geekseat.model.Person;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

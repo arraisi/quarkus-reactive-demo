@@ -1,4 +1,4 @@
-package io.arraisi.model;
+package au.com.geekseat.model;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import lombok.extern.slf4j.Slf4j;
