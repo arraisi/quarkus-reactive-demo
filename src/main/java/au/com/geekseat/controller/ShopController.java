@@ -4,7 +4,6 @@ import au.com.geekseat.model.Shop;
 import au.com.geekseat.service.PocketService;
 import au.com.geekseat.service.ProductService;
 import au.com.geekseat.service.ShopService;
-import io.quarkus.hibernate.reactive.panache.Panache;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -12,6 +11,9 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static io.quarkus.hibernate.reactive.panache.Panache.withTransaction;
+import static javax.ws.rs.core.Response.*;
 
 @Path("/shop")
 @ApplicationScoped
@@ -34,21 +36,21 @@ public class ShopController {
     @PUT
     @Path("/checkout/product")
     public Uni<Response> checkout() {
-        return Panache.withTransaction(() -> productService.checkoutProduct())
+        return withTransaction(() -> productService.checkoutProduct())
                 .map(created -> Response.ok(created).build());
     }
 
     @PUT
     @Path("/checkout")
     public Uni<Response> checkouts() {
-        return Panache.withTransaction(() -> Uni.combine().all()
+        return withTransaction(() -> Uni.combine().all()
                         .unis(
                                 productService.checkoutProduct(),
                                 pocketService.updatePocket()
                         ).asTuple())
-                .map(created -> Response.ok(created).build())
+                .map(created -> ok(created).build())
                 .onFailure()
-                .recoverWithItem((e) -> Response.serverError().build());
+                .recoverWithItem((e) -> serverError().build());
     }
 
 }

@@ -19,9 +19,8 @@ import java.util.List;
 
 import static au.com.geekseat.service.PersonService.fromDecorator;
 import static au.com.geekseat.service.PersonService.toDecorator;
-import static javax.ws.rs.core.Response.ResponseBuilder;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.*;
 
 @Slf4j
 @Path("/person")
@@ -37,25 +36,25 @@ public class PersonController {
     public Uni<Response> save(Person person) {
         person.createdBy();
         return Panache.withTransaction(() -> personService.persist(toDecorator.decorate(person)))
-                .map(created -> Response.created(URI.create("/person" + created.getId())).build());
+                .map(created -> created(URI.create("/person" + created.getId())).build());
     }
 
     @PUT
     public Uni<Response> update(Person person) {
         if (person.getId() == null) {
-            return Uni.createFrom().item(Response.status(BAD_REQUEST))
+            return Uni.createFrom().item(status(BAD_REQUEST))
                     .map(ResponseBuilder::build);
         }
         person.updatedBy();
         return Panache.withTransaction(() -> personService.update(toDecorator.decorate(person)))
-                .map(created -> Response.ok(created).build());
+                .map(created -> ok(created).build());
     }
 
     @GET
     @Path("/{id}")
     public Uni<Response> personById(Long id) {
         return personService.findById(id)
-                .map(person -> person == null ? Response.status(NOT_FOUND) : Response.ok(fromDecorator.decorate(person)))
+                .map(person -> person == null ? status(NOT_FOUND) : ok(fromDecorator.decorate(person)))
                 .map(ResponseBuilder::build);
     }
 
@@ -85,7 +84,7 @@ public class PersonController {
     @Path("/{id}")
     public Uni<Response> delete(@PathParam("id") Long id) {
         return Panache.withTransaction(() -> personService.deleteById(id)
-                .map(deleted -> deleted ? Response.noContent() : Response.notModified())
+                .map(deleted -> deleted ? noContent() : notModified())
                 .map(ResponseBuilder::build));
     }
 
