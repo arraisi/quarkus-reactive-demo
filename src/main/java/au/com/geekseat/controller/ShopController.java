@@ -46,7 +46,9 @@ public class ShopController {
                                 productService.checkoutProduct(),
                                 pocketService.updatePocket()
                         ).asTuple())
-                .map(created -> Response.ok(created).build());
+                .map(created -> Response.ok(created).build())
+                .onFailure()
+                .recoverWithItem((e) -> Response.serverError().build());
     }
 
 }
