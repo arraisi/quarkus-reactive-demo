@@ -94,9 +94,9 @@ public class PersonController {
     public Uni<Tuple2<List<Person>, Long>> datatables(@QueryParam("pageIndex") Integer pageIndex, @QueryParam("pageSize") Integer pageSize) {
         return Panache.withTransaction(() -> Uni.combine().all()
                 .unis(personService.findAll().page(pageIndex, pageSize).list()
-                        .onItem().transformToMulti(persons -> Multi.createFrom().iterable(persons))
-                        .map(fromDecorator::decorate).collect().asList(),
-                personService.count())
+                                .onItem().transformToMulti(persons -> Multi.createFrom().iterable(persons))
+                                .map(fromDecorator::decorate).collect().asList(),
+                        personService.count())
                 .asTuple());
     }
 
