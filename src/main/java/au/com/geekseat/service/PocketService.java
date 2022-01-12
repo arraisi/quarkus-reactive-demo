@@ -18,8 +18,8 @@ public class PocketService implements PanacheRepository<Pocket> {
         return findById(1L)
                 .map(pocket -> {
                     pocket.setBalance(pocket.getBalance().subtract(new BigDecimal(100)));
-                    throw new RuntimeException();
-//                    return pocket;
+//                    throw new RuntimeException();
+                    return pocket;
                 });
     }
 }

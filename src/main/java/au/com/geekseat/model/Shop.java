@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class Shop extends BaseModel {
     private Integer invoiceNumber;
     private Integer quantity;
+    private Boolean active = true;
 
     @OneToOne
     @JoinColumn(name = "product_id")

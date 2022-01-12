@@ -14,8 +14,7 @@ create table hibernate_sequence
 
 create table person
 (
-    id        bigint       not null
-        primary key,
+    id        bigint       not null primary key,
     created   datetime(6)  null,
     createdBy varchar(255) null,
     creator   varchar(255) null,
@@ -32,8 +31,7 @@ create table person
 
 create table pocket
 (
-    id        bigint       not null
-        primary key,
+    id        bigint       not null primary key,
     balance   decimal      not null default 0,
     name      varchar(255) null,
     person_id bigint       not null,
@@ -43,8 +41,7 @@ create table pocket
 
 create table product
 (
-    id        bigint         not null
-        primary key,
+    id        bigint         not null primary key,
     created   datetime(6)    null,
     createdBy varchar(255)   null,
     creator   varchar(255)   null,
@@ -59,8 +56,7 @@ create table product
 
 create table role
 (
-    id   bigint       not null
-        primary key,
+    id   bigint       not null primary key,
     name varchar(255) null
 );
 
@@ -76,8 +72,7 @@ create table person_role
 
 create table shop
 (
-    id            bigint       not null
-        primary key,
+    id            bigint       not null primary key,
     created       datetime(6)  null,
     createdBy     varchar(255) null,
     creator       varchar(255) null,
@@ -87,6 +82,7 @@ create table shop
     updatedBy     varchar(255) null,
     invoiceNumber int          null,
     quantity      int          null,
+    active        bit          null,
     product_id    bigint       null,
     constraint shop_product_id_fk
         foreign key (product_id) references product (id)

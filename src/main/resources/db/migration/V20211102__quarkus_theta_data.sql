@@ -25,7 +25,7 @@ VALUES (5, 'Rahman', 'rahman@mail.com', '$2a$12$Z2Zc3tuyh9oiM4GX7EjxmeqVxTtxctl8
 
 DELETE FROM pocket WHERE 1=1;
 insert into pocket(id, name, balance, person_id)
-VALUES (1, 'ewallet', 10000, 1);
+VALUES (1, 'ewallet', 1000, 1);
 
 DELETE FROM role WHERE 1=1;
 insert into role(id, name)
@@ -55,10 +55,10 @@ values (3, 'Product-003', 1, 200);
 
 DELETE FROM shop WHERE 1=1;
 insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (1, 1001, 2, 1);
+VALUES (1, 1001, 3, 1);
 insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (2, 1001, 2, 1);
+VALUES (2, 1001, 2, 2);
 insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (3, 1001, 2, 1);
+VALUES (3, 1001, 1, 3);
 
 
