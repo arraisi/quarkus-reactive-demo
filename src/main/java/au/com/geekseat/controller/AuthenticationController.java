@@ -19,33 +19,36 @@ import javax.ws.rs.core.Response;
 @RequestScoped
 public class AuthenticationController {
 
-    @Inject
     private PersonService personService;
-
-    @Inject
     private PasswordEncoder pwdEncoder;
+    private JWTUtils jwtUtils;
+
+    public AuthenticationController(PersonService personService,
+                                    PasswordEncoder pwdEncoder,
+                                    JWTUtils jwtUtils) {
+        this.personService = personService;
+        this.pwdEncoder = pwdEncoder;
+        this.jwtUtils = jwtUtils;
+    }
 
     @POST
     @Path("/login")
     public Uni<Response> personById(AuthRequest request) {
-        System.out.println(Utility.gson.toJson(request));
-         return personService.findByUsername(request.getEmail())
+        return personService.findByUsername(request.getEmail())
                 .map(person -> {
-                    if (person != null && Utility.checkPassword(request.getPassword(), person.getPassword())) {
-                        if (person.getActive()) {
-                            try {
-                                return Response.ok(JWTUtils.generate(personService.fromDecorator.decorate(person)));
-                            } catch (Exception e) {
-                                Log.error("Error loggin in: {}" );
-                                return Response.status(Response.Status.BAD_REQUEST);
-                            }
-                        } else {
-                            Log.warn("User not found or incorrect password");
-                            return Response.status(Response.Status.UNAUTHORIZED);
-                        }
-                    } else {
+                    if (person == null || !Utility.checkPassword(request.getPassword(), person.getPassword())) {
                         Log.warn("User not found or incorrect password");
                         return Response.status(Response.Status.UNAUTHORIZED);
+                    }
+                    if (!person.getActiveFlag()) {
+                        Log.warn("Login Failed user is inactive");
+                        return Response.status(Response.Status.UNAUTHORIZED);
+                    }
+                    try {
+                        return Response.ok(JWTUtils.generate(personService.fromDecorator.decorate(person)));
+                    } catch (Exception e) {
+                        Log.error("Error loggin in: {}");
+                        return Response.status(Response.Status.BAD_REQUEST);
                     }
                 }).map(Response.ResponseBuilder::build);
     }

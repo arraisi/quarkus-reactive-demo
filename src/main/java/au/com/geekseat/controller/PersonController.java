@@ -22,7 +22,7 @@ import static javax.ws.rs.core.Response.ResponseBuilder;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-@RolesAllowed({"User", "Admin" })
+@RolesAllowed({"user", "admin" })
 @Path("/person")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -76,7 +76,7 @@ public class PersonController {
     @GET
     @Path("/list/active")
     public Multi<Person> listActive() {
-        return personService.list("active", true)
+        return personService.list("active_flag", true)
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
                 .map(personService.fromDecorator::decorate);
     }

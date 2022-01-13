@@ -3,39 +3,40 @@ package au.com.geekseat.security;
 import au.com.geekseat.helper.Utility;
 
 import java.util.List;
+import java.util.Set;
 
 public class Principal {
 
     private Long id;
     private String name;
     private String email;
-    private String role;
+    private Set<String> roles;
     private List<String> states;
     private boolean administrator;
     private String token;
 
     public static final Principal System = new Principal(null, null, null, null, null, false);
 
-    public Principal(Long id, String name, String email, String role, List<String> states, boolean administrator) {
+    public Principal(Long id, String name, String email, Set<String> roles, List<String> states, boolean administrator) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
         this.states = states;
         this.administrator = administrator;
     }
 
-    public Principal(Long id, String firstName, String lastName, String email, String role, List<String> states, boolean administrator) {
+    public Principal(Long id, String firstName, String lastName, String email, Set<String> roles, List<String> states, boolean administrator) {
         this.id = id;
         this.name = Utility.strip(Utility.stringify(firstName) + " " + Utility.stringify(lastName));
         this.email = email;
-        this.role = role;
+        this.roles = roles;
         this.states = states;
         this.administrator = administrator;
     }
 
     public Principal essence() {
-        return new Principal(this.id, this.name, this.email, this.role, this.states, this.administrator);
+        return new Principal(this.id, this.name, this.email, this.roles, this.states, this.administrator);
     }
 
     public Long getId() {
@@ -62,12 +63,12 @@ public class Principal {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public List<String> getStates() {

@@ -72,20 +72,20 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
     }
 
     public Uni<Person> queryFindById(Long id) {
-        return client.preparedQuery("select id, active, birth, email, mapData, name, password from Person where id = ?")
+        return client.preparedQuery("select id, active_flag, birth, email, mapData, name, password from Person where id = ?")
                 .execute(Tuple.of(id))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     public Multi<Person> queryPersonMultiList() {
-        return client.query("SELECT id, active, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
+        return client.query("SELECT id, active_flag, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
                 .onItem().transformToMulti(rows -> Multi.createFrom().iterable(rows))
                 .onItem().transform(PersonService::from);
     }
 
     public Uni<List<Person>> queryPersonUniList() {
-        return client.query("SELECT id, active, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
+        return client.query("SELECT id, active_flag, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
                 .onItem().transformToMulti(rows -> rows.iterator().toMulti())
                 .onItem().transform(PersonService::from).collect().asList();
     }
@@ -97,7 +97,7 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
         person.setBirth(row.getLocalDate("birth"));
         person.setEmail(row.getString("email"));
         person.setPassword(row.getString("password"));
-        person.setActive(row.getBoolean("active"));
+        person.setActiveFlag(row.getBoolean("active_flag"));
         return person;
     }
 }

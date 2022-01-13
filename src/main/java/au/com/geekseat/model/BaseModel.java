@@ -4,25 +4,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import au.com.geekseat.helper.Utility;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public class BaseModel extends PanacheEntity {
+public class BaseModel {
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @JsonIgnore
+    @Column(name = "created_by")
+    @Size(max = 255)
     private String createdBy;
+
     @JsonIgnore
+    @Column(name = "updated_by")
+    @Size(max = 255)
     private String updatedBy;
+
     @JsonIgnore
+    @Column(name = "created")
     private LocalDateTime created;
+
     @JsonIgnore
+    @Column(name = "updated")
     private LocalDateTime updated;
+
+    @Column(name = "active_flag")
+    private Boolean activeFlag = true;
+
     @JsonIgnore
+    @Column(name = "map_data")
     protected String mapData;
     @Transient
     protected Map<String, Object> map = new HashMap<>();
@@ -114,5 +130,13 @@ public class BaseModel extends PanacheEntity {
 
     public void setTransitMap(Map<String, Object> transitMap) {
         this.transitMap = transitMap;
+    }
+
+    public Boolean getActiveFlag() {
+        return activeFlag;
+    }
+
+    public void setActiveFlag(Boolean activeFlag) {
+        this.activeFlag = activeFlag;
     }
 }

@@ -12,7 +12,7 @@ create table person
     birth    date,
     email    varchar(255),
     password varchar(255),
-    active   bit(1),
+    active_flag   bit(1),
     created datetime,
     updated datetime,
     mapData longtext,

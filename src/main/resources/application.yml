@@ -9,7 +9,7 @@ quarkus:
     password: root
     jdbc: false
     reactive:
-      url: mysql://localhost:3306/quarkus
+      url: mysql://localhost:3306/quarkus_theta
   swagger-ui:
     enable: true
   native:
@@ -24,6 +24,7 @@ flyway:
 mp:
   jwt:
     verify:
+      duration: 1800
       issuer: geekseat
       publickey:
         location: publicKey.pem

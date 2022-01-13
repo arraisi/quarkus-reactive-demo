@@ -1,15 +1,11 @@
 package au.com.geekseat.helper;
 
-import au.com.geekseat.dto.Principal;
+import au.com.geekseat.security.Principal;
 import io.smallrye.jwt.build.Jwt;
-import org.eclipse.microprofile.jwt.Claims;
 import au.com.geekseat.model.Person;
 import au.com.geekseat.model.Role;
 
 import javax.enterprise.context.RequestScoped;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,7 +20,8 @@ public class JWTUtils {
         if (roles.size() == 0) {
             return null;
         }
-        Principal principal = new Principal(person.getId(), person.getName(), person.getEmail(), "");
+        Principal principal = new Principal(person.getId(), person.getName(), person.getEmail(),
+                roles, null, roles.stream().anyMatch(s -> s.equals("admin")));
         String token = Jwt
                 .issuer(ISSUER)
                 .upn(person.getEmail())

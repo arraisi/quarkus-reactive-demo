@@ -19,7 +19,6 @@ public class Person extends BaseModel {
     private String email;
     @JsonProperty(access = WRITE_ONLY)
     private String password;
-    private Boolean active = true;
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "person_role",
             joinColumns = @JoinColumn(name = "person_id"),
@@ -57,14 +56,6 @@ public class Person extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public List<Role> getRoles() {
