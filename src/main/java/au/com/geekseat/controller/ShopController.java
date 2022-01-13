@@ -34,23 +34,17 @@ public class ShopController {
     }
 
     @PUT
-    @Path("/checkout/product")
-    public Uni<Response> checkout() {
-        return withTransaction(() -> productService.checkoutProduct())
-                .map(created -> Response.ok(created).build());
-    }
-
-    @PUT
     @Path("/checkout")
-    public Uni<Response> checkouts() {
+    public Uni<Response> checkout() {
         return withTransaction(() -> Uni.combine().all()
-                        .unis(
-                                productService.checkoutProduct(),
-                                pocketService.updatePocket()
-                        ).asTuple())
-                .map(created -> ok(created).build())
+                .unis(
+                        productService.checkoutProduct(),
+                        pocketService.updatePocket(),
+                        shopService.updateStatus()
+                ).asTuple())
+                .map(objects -> ok(objects).build())
                 .onFailure()
-                .recoverWithItem((e) -> serverError().build());
+                .recoverWithItem((e) -> serverError().entity(e.getMessage()).build());
     }
 
 }

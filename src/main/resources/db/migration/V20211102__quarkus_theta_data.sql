@@ -54,11 +54,11 @@ insert into product(id, name, quantity, price)
 values (3, 'Product-003', 1, 200);
 
 DELETE FROM shop WHERE 1=1;
-insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (1, 1001, 3, 1);
-insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (2, 1001, 2, 2);
-insert into shop(id, invoiceNumber, quantity, product_id)
-VALUES (3, 1001, 1, 3);
+insert into shop(id, invoiceNumber, quantity, product_id, active)
+VALUES (1, 1001, 3, 1, true);
+insert into shop(id, invoiceNumber, quantity, product_id, active)
+VALUES (2, 1001, 2, 2, true);
+insert into shop(id, invoiceNumber, quantity, product_id, active)
+VALUES (3, 1001, 1, 3, true);
 
 

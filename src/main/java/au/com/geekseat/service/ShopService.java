@@ -13,10 +13,9 @@ public class ShopService implements PanacheRepository<Shop> {
         return findAll().list()
                 .map(shops -> {
                     shops.forEach(shop -> {
-                        /* ON FAILURE TEST */
-//                        if (shop.getId() == 3) {
-//                            throw new RuntimeException();
-//                        }
+                        if (!shop.getActive()) {
+                            throw new RuntimeException("Wrong invoice");
+                        }
                         shop.setActive(false);
                         persist(shop);
                     });

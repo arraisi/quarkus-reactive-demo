@@ -1,7 +1,6 @@
 create table fruit
 (
-    id   bigint      not null
-        primary key,
+    id   bigint      not null primary key,
     name varchar(40) null,
     constraint fruit_name_uindex
         unique (name)
@@ -31,10 +30,10 @@ create table person
 
 create table pocket
 (
-    id        bigint       not null primary key,
-    balance   decimal      not null default 0,
-    name      varchar(255) null,
-    person_id bigint       not null,
+    id        bigint         not null primary key,
+    balance   decimal(19, 2) null,
+    name      varchar(255)   null,
+    person_id bigint         not null,
     constraint pocket_person_id_fk
         foreign key (person_id) references person (id)
 );
@@ -62,8 +61,8 @@ create table role
 
 create table person_role
 (
-    role_id   bigint not null,
     person_id bigint not null,
+    role_id   bigint not null,
     constraint pr_person_id_fk
         foreign key (person_id) references person (id),
     constraint pr_role_id_fk
@@ -80,11 +79,12 @@ create table shop
     mapData       varchar(255) null,
     updated       datetime(6)  null,
     updatedBy     varchar(255) null,
+    active        bit          null,
     invoiceNumber int          null,
     quantity      int          null,
-    active        bit          null,
     product_id    bigint       null,
     constraint shop_product_id_fk
         foreign key (product_id) references product (id)
 );
+
 

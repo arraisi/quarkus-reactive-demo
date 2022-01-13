@@ -12,8 +12,10 @@ public class PocketService implements PanacheRepository<Pocket> {
     public Uni<Pocket> updatePocket() {
         return findById(1L)
                 .map(pocket -> {
+                    if (pocket.getBalance().compareTo(new BigDecimal(100)) < 0) {
+                        throw new RuntimeException("Balance is not enough");
+                    }
                     pocket.setBalance(pocket.getBalance().subtract(new BigDecimal(100)));
-//                    throw new RuntimeException();
                     return pocket;
                 });
     }
