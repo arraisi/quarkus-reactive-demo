@@ -1,0 +1,34 @@
+greeting:
+  message: "hello"
+quarkus:
+  http:
+    port: 8118
+  datasource:
+    db-kind: mysql
+    username: root
+    password: root
+    jdbc: false
+    reactive:
+      url: mysql://localhost:3306/quarkus_theta
+  swagger-ui:
+    enable: true
+  native:
+    resources:
+      includes: publicKey.pem
+  smallrye-openapi:
+    info-version: ${quarkus.application.version}
+    info-description : Theta Quarkus Service Application Demo
+flyway:
+  enable: false
+
+mp:
+  jwt:
+    verify:
+      issuer: theta
+      publickey:
+        location: publicKey.pem
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: privateKey.pem

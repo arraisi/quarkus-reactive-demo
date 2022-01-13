@@ -13,6 +13,11 @@ create table person
     email    varchar(255),
     password varchar(255),
     active   bit(1),
+    created datetime,
+    updated datetime,
+    mapData longtext,
+    created_by varchar(50),
+    updated_by varchar(255),
     primary key (id)
 ) engine = InnoDB;
 
