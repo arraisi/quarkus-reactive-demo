@@ -6,8 +6,6 @@ import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.tuples.Tuple2;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,10 +17,10 @@ import java.util.List;
 
 import static au.com.geekseat.service.PersonService.fromDecorator;
 import static au.com.geekseat.service.PersonService.toDecorator;
+import static io.quarkus.panache.common.Sort.Direction.*;
 import static javax.ws.rs.core.Response.Status.*;
 import static javax.ws.rs.core.Response.*;
 
-@Slf4j
 @Path("/person")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -90,13 +88,18 @@ public class PersonController {
 
     @GET
     @Path("/datatables")
-    public Uni<Tuple2<List<Person>, Long>> datatables(@QueryParam("pageIndex") Integer pageIndex, @QueryParam("pageSize") Integer pageSize) {
+    public Uni<Response> datatables(
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("sortDesc") Boolean sortDesc,
+            @QueryParam("pageIndex") Integer pageIndex,
+            @QueryParam("pageSize") Integer pageSize) {
         return Panache.withTransaction(() -> Uni.combine().all()
-                .unis(personService.findAll().page(pageIndex, pageSize).list()
-                        .onItem().transformToMulti(persons -> Multi.createFrom().iterable(persons))
-                        .map(fromDecorator::decorate).collect().asList(),
-                personService.count())
-                .asTuple());
+                .unis(personService.findAll(Sort.by(sortBy, sortDesc ? Descending : Ascending)).page(pageIndex, pageSize).list()
+                                .onItem().transformToMulti(persons -> Multi.createFrom().iterable(persons))
+                                .map(fromDecorator::decorate).collect().asList(),
+                        personService.count())
+                .asTuple()
+                .map(objects -> ok(objects).build()));
     }
 
     @GET
