@@ -6,6 +6,7 @@ VALUES (2, 'Apple');
 INSERT INTO fruit(id, name)
 VALUES (3, 'Banana');
 
+# PASSWORD = 1234
 DELETE FROM person WHERE 1=1;
 insert into person(id, name, email, password, birth, active)
 VALUES (1, 'Abdul', 'abdul@mail.com', '$2a$12$.L1LSCN01Q7HHt65XNY5euol/D.eOyStYXHb9q1NVwMhpQe007nvi', '2020-08-16', 1);
