@@ -25,6 +25,8 @@ public class Person extends BaseModel {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnoreProperties("persons")
     private List<Role> roles = new ArrayList<>();
+    @Column(name = "active")
+    private Boolean active = true;
 
     public String getName() {
         return name;
@@ -64,5 +66,13 @@ public class Person extends BaseModel {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

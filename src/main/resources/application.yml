@@ -3,13 +3,17 @@ greeting:
 quarkus:
   http:
     port: 8118
+    cors:
+      ~: true
+      origins: http://localhost:8080
+      access-control-allow-credentials: true
   datasource:
     db-kind: mysql
     username: root
     password: root
     jdbc: false
     reactive:
-      url: mysql://localhost:3306/quarkus_theta
+      url: mysql://localhost:3306/quarkus
   swagger-ui:
     enable: true
   native:

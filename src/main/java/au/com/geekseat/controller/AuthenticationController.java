@@ -40,7 +40,7 @@ public class AuthenticationController {
                         Log.warn("User not found or incorrect password");
                         return Response.status(Response.Status.UNAUTHORIZED);
                     }
-                    if (!person.getActiveFlag()) {
+                    if (!person.getActive()) {
                         Log.warn("Login Failed user is inactive");
                         return Response.status(Response.Status.UNAUTHORIZED);
                     }

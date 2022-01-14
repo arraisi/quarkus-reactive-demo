@@ -34,9 +34,6 @@ public class BaseModel {
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    @Column(name = "active_flag")
-    private Boolean activeFlag = true;
-
     @JsonIgnore
     @Column(name = "map_data")
     protected String mapData;
@@ -130,13 +127,5 @@ public class BaseModel {
 
     public void setTransitMap(Map<String, Object> transitMap) {
         this.transitMap = transitMap;
-    }
-
-    public Boolean getActiveFlag() {
-        return activeFlag;
-    }
-
-    public void setActiveFlag(Boolean activeFlag) {
-        this.activeFlag = activeFlag;
     }
 }
