@@ -1,9 +1,9 @@
 package au.com.geekseat.controller;
 
 import au.com.geekseat.model.Fruit;
+import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Consumes;
@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.Duration;
 
-@Slf4j
 @Path("/system/monitor")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,7 +32,7 @@ public class GreetingController {
     public Multi<Integer> streamTest() {
         return Multi.createFrom().items(1, 2, 3, 4, 5)
                 .onItem().call(i -> {
-                    log.info("Ping i: {}", i);
+                    Log.info("Ping i: {}" + i);
                     Duration delay = Duration.ofSeconds(1);
                     return Uni.createFrom().nullItem().onItem().delayIt().by(delay);
                 });

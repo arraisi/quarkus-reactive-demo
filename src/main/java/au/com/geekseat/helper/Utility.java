@@ -78,4 +78,27 @@ public class Utility {
     public static LocalDateTime retrieveDateEndDay(Map<String, Object> dataMap, String key) {
         return retrieveDate(dataMap, key, 23, 59, 59);
     }
+
+    public static String hashPassword(String plaintext) {
+        return BCrypt.hashpw(plaintext, BCrypt.gensalt(12));
+    }
+
+    public static boolean checkPassword(String candidate, String hashed) {
+        return BCrypt.checkpw(candidate, hashed);
+    }
+
+    public static String stringify(Object object) {
+        return object == null ? "" : String.valueOf(object);
+    }
+
+    public static String strip(Object value) {
+        return stringify(value).strip();
+    }
+
+    public static String stripText(String str) {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        return str.strip();
+    }
 }

@@ -50,7 +50,7 @@ public class ProductService implements PanacheRepository<Product> {
     }
 
     public Uni<Response> update(Product product) {
-        String query = "name = :name, mapData = :mapData, price = :price, quantity = :quantity, creator = :creator, editor = :editor, created = :created, createdBy = :createdBy, updated = :updated, updatedBy = :updatedBy " +
+        String query = "name = :name, mapData = :mapData, price = :price, quantity = :quantity, created = :created, createdBy = :createdBy, updated = :updated, updatedBy = :updatedBy " +
                 "where id = :id";
         product.updatedBy();
         return Panache.withTransaction(() -> update(query, params(product)))
@@ -65,8 +65,6 @@ public class ProductService implements PanacheRepository<Product> {
         params.put("name", entity.getName());
         params.put("price", entity.getPrice());
         params.put("quantity", entity.getQuantity());
-        params.put("creator", entity.getCreator());
-        params.put("editor", entity.getEditor());
         params.put("created", entity.getCreated());
         params.put("createdBy", entity.getCreatedBy());
         params.put("updated", entity.getUpdated());

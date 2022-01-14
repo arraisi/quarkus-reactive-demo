@@ -13,19 +13,18 @@ create table hibernate_sequence
 
 create table person
 (
-    id        bigint       not null primary key,
-    created   datetime(6)  null,
-    createdBy varchar(255) null,
-    creator   varchar(255) null,
-    editor    varchar(255) null,
-    mapData   varchar(255) null,
-    updated   datetime(6)  null,
-    updatedBy varchar(255) null,
-    active    bit          null,
-    birth     date         null,
-    email     varchar(255) null,
-    name      varchar(255) null,
-    password  varchar(255) null
+    id       bigint not null,
+    name     varchar(255),
+    birth    date,
+    email    varchar(255),
+    password varchar(255),
+    active_flag   bit(1),
+    created datetime,
+    updated datetime,
+    mapData longtext,
+    created_by varchar(50),
+    updated_by varchar(255),
+    primary key (id)
 );
 
 create table pocket

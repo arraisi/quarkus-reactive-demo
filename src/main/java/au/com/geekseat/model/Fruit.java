@@ -1,11 +1,11 @@
 package au.com.geekseat.model;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
-import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@Slf4j
 @Entity
 @Table(name = "fruit")
 public class Fruit extends PanacheEntity {
@@ -13,4 +13,18 @@ public class Fruit extends PanacheEntity {
     @Column(length = 40, unique = true)
     public String name;
 
+    public Fruit(String name) {
+        this.name = name;
+    }
+
+    public Fruit() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -2,9 +2,6 @@ package au.com.geekseat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,9 +11,6 @@ import java.util.List;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 import static javax.persistence.FetchType.EAGER;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "person")
 public class Person extends BaseModel {
@@ -25,12 +19,60 @@ public class Person extends BaseModel {
     private String email;
     @JsonProperty(access = WRITE_ONLY)
     private String password;
-    private Boolean active = true;
-
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "person_role",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnoreProperties("persons")
     private List<Role> roles = new ArrayList<>();
+    @Column(name = "active")
+    private Boolean active = true;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getBirth() {
+        return birth;
+    }
+
+    public void setBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

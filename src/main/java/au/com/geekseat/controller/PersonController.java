@@ -7,7 +7,8 @@ import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,14 +16,17 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.ResponseBuilder;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static au.com.geekseat.service.PersonService.fromDecorator;
 import static au.com.geekseat.service.PersonService.toDecorator;
 import static io.quarkus.panache.common.Sort.Direction.*;
-import static javax.ws.rs.core.Response.Status.*;
 import static javax.ws.rs.core.Response.*;
 
+@RolesAllowed({"user", "admin" })
 @Path("/person")
-@ApplicationScoped
+@RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonController {
@@ -73,7 +77,7 @@ public class PersonController {
     @GET
     @Path("/list/active")
     public Multi<Person> listActive() {
-        return personService.list("active", true)
+        return personService.list("active_flag", true)
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
                 .map(fromDecorator::decorate);
     }

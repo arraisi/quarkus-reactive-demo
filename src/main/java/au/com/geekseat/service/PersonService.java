@@ -44,19 +44,22 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
                 .map(row -> row.next().getLong("rowCount"));
     }
 
+    public Uni<Person> findByUsername(String userName) {
+        return find("email", userName).firstResult();
+    }
+
     public Uni<Boolean> update(Person person) {
         return client.preparedQuery("UPDATE Person SET " +
-                "name = ?, " +
-                "birth = ?, " +
-                "mapData = ?, " +
-                "editor = ?, " +
-                "updated = ?, " +
-                "updatedBy = ? " +
-                "WHERE id = ?")
+                        "name = ?, " +
+                        "birth = ?, " +
+                        "mapData = ?, " +
+                        "editor = ?, " +
+                        "updated = ?, " +
+                        "updatedBy = ? " +
+                        "WHERE id = ?")
                 .execute(Tuple.from(new Object[]{person.getName(),
                         person.getBirth(),
                         person.getMapData(),
-                        person.getEditor(),
                         person.getUpdated(),
                         person.getUpdatedBy(),
                         person.getId()}))
@@ -94,7 +97,7 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
         person.setBirth(row.getLocalDate("birth"));
         person.setEmail(row.getString("email"));
         person.setPassword(row.getString("password"));
-        person.setActive(row.getBoolean("active"));
+        person.setActive(row.getBoolean("active_flag"));
         return person;
     }
 }

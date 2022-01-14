@@ -1,16 +1,10 @@
 package au.com.geekseat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "pocket")
 public class Pocket {
@@ -23,4 +17,46 @@ public class Pocket {
     @JoinColumn(name = "person_id", nullable = false)
     @JsonIgnoreProperties("pockets")
     private Person person;
+
+    public Pocket(Long id, String name, BigDecimal balance, Person person) {
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+        this.person = person;
+    }
+
+    public Pocket() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 }

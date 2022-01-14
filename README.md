@@ -7,11 +7,11 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 ## Setup Database
     ```
     docker run --rm --name \
-    quarkus-reactive-theta-db \
-    -e MYSQL_DATABASE=quarkus-theta \
-    -e MYSQL_USER=theta \
+    quarkus-db \
+    -e MYSQL_DATABASE=quarkus \
+    -e MYSQL_USER=quarkususer \
     -e MYSQL_PASSWORD=secret \
-    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_ROOT_PASSWORD=root \
     -v "$PWD/mariadb-data:/var/lib/mysql" \
     -p 127.0.0.1:3306:3306 \
     mariadb:10

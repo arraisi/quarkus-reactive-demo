@@ -1,0 +1,43 @@
+greeting:
+  message: "hello"
+quarkus:
+  http:
+    port: 9090
+    cors:
+      ~: true
+      origins: http://localhost:8080
+      access-control-allow-credentials: true
+  datasource:
+    db-kind: mysql
+    username: quarkususer
+    password: secret
+    jdbc: false
+    reactive:
+      url: mysql://localhost:3306/quarkus
+  swagger-ui:
+    enable: true
+  native:
+    resources:
+      includes: publicKey.pem
+  smallrye-openapi:
+    info-version: ${quarkus.application.version}
+    info-description : Theta Quarkus Service Application Demo
+  hibernate-orm:
+    database:
+#      generation: drop-and-create
+      generation: none
+flyway:
+  enable: false
+
+mp:
+  jwt:
+    verify:
+      duration: 1800
+      issuer: geekseat
+      publickey:
+        location: publicKey.pem
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: privateKey.pem
