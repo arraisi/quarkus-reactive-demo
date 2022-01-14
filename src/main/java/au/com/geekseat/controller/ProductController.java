@@ -1,5 +1,6 @@
 package au.com.geekseat.controller;
 
+import au.com.geekseat.model.Person;
 import au.com.geekseat.model.Product;
 import au.com.geekseat.service.ProductService;
 import io.quarkus.hibernate.reactive.panache.Panache;
@@ -13,14 +14,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.util.HashMap;
+import java.net.URI;
+import java.util.List;
 
-import static au.com.geekseat.service.ProductService.fromDecorator;
+import static au.com.geekseat.service.ProductService.*;
 import static io.quarkus.panache.common.Sort.Direction.Ascending;
 import static io.quarkus.panache.common.Sort.Direction.Descending;
+import static javax.ws.rs.core.Response.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.ok;
-import static javax.ws.rs.core.Response.status;
 
 @Path("/product")
 @ApplicationScoped
@@ -47,6 +48,13 @@ public class ProductController {
                 .map(objects -> ok(objects).build()));
     }
 
+    @POST
+    public Uni<Response> save(Product product) {
+        product.createdBy();
+        return Panache.withTransaction(() -> productService.persist(toDecorator.decorate(product)))
+                .map(person -> created(URI.create("/person" + person.getId())).build());
+    }
+
     @PUT
     public Uni<Response> update(Product product) {
         if (product.getId() == null) {
@@ -54,5 +62,11 @@ public class ProductController {
                     .map(Response.ResponseBuilder::build);
         }
         return productService.update(product);
+    }
+
+    @GET
+    @Path("/list")
+    public Uni<List<Product>> list() {
+        return productService.listAll(Sort.by("id"));
     }
 }
