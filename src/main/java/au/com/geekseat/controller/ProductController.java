@@ -1,6 +1,5 @@
 package au.com.geekseat.controller;
 
-import au.com.geekseat.model.Person;
 import au.com.geekseat.model.Product;
 import au.com.geekseat.service.ProductService;
 import io.quarkus.hibernate.reactive.panache.Panache;
@@ -62,6 +61,14 @@ public class ProductController {
                     .map(Response.ResponseBuilder::build);
         }
         return productService.update(product);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Uni<Response> delete(@PathParam("id") Long id) {
+        return Panache.withTransaction(() -> productService.deleteById(id)
+                .map(deleted -> deleted ? noContent() : notModified())
+                .map(ResponseBuilder::build));
     }
 
     @GET

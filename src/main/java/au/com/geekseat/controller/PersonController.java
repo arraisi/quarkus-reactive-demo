@@ -24,7 +24,7 @@ import static au.com.geekseat.service.PersonService.toDecorator;
 import static io.quarkus.panache.common.Sort.Direction.*;
 import static javax.ws.rs.core.Response.*;
 
-@RolesAllowed({"user", "admin" })
+@RolesAllowed({"user", "admin"})
 @Path("/person")
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +49,18 @@ public class PersonController {
         }
         person.updatedBy();
         return Panache.withTransaction(() -> personService.update(toDecorator.decorate(person)))
-                .map(created -> ok(created).build());
+                .map(updated -> ok(updated).build());
+    }
+
+    @PUT
+    @Path("map")
+    public Uni<Response> updateMap(Person person) {
+        if (person.getId() == null || person.getMap().isEmpty()) {
+            return Uni.createFrom().item(status(BAD_REQUEST))
+                    .map(ResponseBuilder::build);
+        }
+        return personService.updateMap(person)
+                .map(updated -> ok(updated).build());
     }
 
     @GET

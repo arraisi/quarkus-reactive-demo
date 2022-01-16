@@ -2,18 +2,17 @@ package au.com.geekseat.controller;
 
 import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Uni;
-import au.com.geekseat.controller.request.AuthRequest;
 import au.com.geekseat.helper.JWTUtils;
 import au.com.geekseat.helper.PasswordEncoder;
 import au.com.geekseat.helper.Utility;
 import au.com.geekseat.service.PersonService;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import static au.com.geekseat.service.PersonService.fromDecorator;
+import static javax.ws.rs.core.MediaType.*;
 
 @Path("/auth")
 @RequestScoped
@@ -29,10 +28,12 @@ public class AuthenticationController {
 
     @POST
     @Path("/login")
-    public Uni<Response> personById(AuthRequest request) {
-        return personService.findByUsername(request.getEmail())
+    @Produces({APPLICATION_JSON, APPLICATION_XML})
+    @Consumes(APPLICATION_FORM_URLENCODED)
+    public Uni<Response> personById(@FormParam("email") String email, @FormParam("password") String password) {
+        return personService.findByUsername(email)
                 .map(person -> {
-                    if (person == null || !Utility.checkPassword(request.getPassword(), person.getPassword())) {
+                    if (person == null || !Utility.checkPassword(password, person.getPassword())) {
                         Log.warn("User not found or incorrect password");
                         return Response.status(Response.Status.UNAUTHORIZED);
                     }

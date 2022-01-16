@@ -17,6 +17,7 @@ public class Person extends BaseModel {
     private String name;
     private LocalDate birth;
     private String email;
+    private Gender gender;
     @JsonProperty(access = WRITE_ONLY)
     private String password;
     @ManyToMany(fetch = EAGER)
@@ -50,6 +51,14 @@ public class Person extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public String getPassword() {

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @RequestScoped
 public class JWTUtils {
 
-    public final static Long DURATION = 1800l;
+    public final static Long DURATION = 1800L;
     public final static String ISSUER = "geekseat";
 
     public static Principal generate(Person person) {
@@ -20,7 +20,7 @@ public class JWTUtils {
         if (roles.size() == 0) {
             return null;
         }
-        Principal principal = new Principal(person.getId(), person.getName(), person.getEmail(),
+        Principal principal = new Principal(person.getId(), person.getName(), person.getEmail(), person.getMap(), person.getGender(),
                 roles, null, roles.stream().anyMatch(s -> s.equals("admin")));
         String token = Jwt
                 .issuer(ISSUER)

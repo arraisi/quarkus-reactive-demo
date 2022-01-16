@@ -13,15 +13,16 @@ create table hibernate_sequence
 
 create table person
 (
-    id       bigint not null,
-    name     varchar(255),
-    birth    date,
-    email    varchar(255),
-    password varchar(255),
-    active_flag   bit(1),
-    created datetime,
-    updated datetime,
-    mapData longtext,
+    id         bigint not null,
+    name       varchar(255),
+    birth      date,
+    email      varchar(255),
+    gender     varchar(10),
+    password   varchar(255),
+    active     bit(1),
+    created    datetime,
+    updated    datetime,
+    mapData    longtext,
     created_by varchar(50),
     updated_by varchar(255),
     primary key (id)

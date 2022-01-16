@@ -1,8 +1,9 @@
 package au.com.geekseat.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "shop")
@@ -11,16 +12,20 @@ public class Shop extends BaseModel {
     private Integer quantity;
     private Boolean active = true;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    @JsonIgnoreProperties("shop")
+    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Shop(Integer invoiceNumber, Integer quantity, Boolean active, Product product) {
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
+
+    public Shop(Integer invoiceNumber, Integer quantity, Boolean active, Product product, Person person) {
         this.invoiceNumber = invoiceNumber;
         this.quantity = quantity;
         this.active = active;
         this.product = product;
+        this.person = person;
     }
 
     public Shop() {
@@ -56,5 +61,13 @@ public class Shop extends BaseModel {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

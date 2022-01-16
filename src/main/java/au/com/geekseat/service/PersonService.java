@@ -2,6 +2,7 @@ package au.com.geekseat.service;
 
 import au.com.geekseat.helper.Decorator;
 import au.com.geekseat.model.Person;
+import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -52,10 +53,9 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
         return client.preparedQuery("UPDATE Person SET " +
                         "name = ?, " +
                         "birth = ?, " +
-                        "mapData = ?, " +
-                        "editor = ?, " +
+                        "map_data = ?, " +
                         "updated = ?, " +
-                        "updatedBy = ? " +
+                        "updated_by = ? " +
                         "WHERE id = ?")
                 .execute(Tuple.from(new Object[]{person.getName(),
                         person.getBirth(),
@@ -72,20 +72,20 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
     }
 
     public Uni<Person> queryFindById(Long id) {
-        return client.preparedQuery("select id, active, birth, email, mapData, name, password from Person where id = ?")
+        return client.preparedQuery("select id, active, birth, email, map_data, name, password from Person where id = ?")
                 .execute(Tuple.of(id))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     public Multi<Person> queryPersonMultiList() {
-        return client.query("SELECT id, active, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
+        return client.query("SELECT id, active, birth, email, map_data, name, password FROM Person ORDER BY name ASC").execute()
                 .onItem().transformToMulti(rows -> Multi.createFrom().iterable(rows))
                 .onItem().transform(PersonService::from);
     }
 
     public Uni<List<Person>> queryPersonUniList() {
-        return client.query("SELECT id, active, birth, email, mapData, name, password FROM Person ORDER BY name ASC").execute()
+        return client.query("SELECT id, active, birth, email, map_data, name, password FROM Person ORDER BY name ASC").execute()
                 .onItem().transformToMulti(rows -> rows.iterator().toMulti())
                 .onItem().transform(PersonService::from).collect().asList();
     }
@@ -97,7 +97,12 @@ public class PersonService extends BaseService implements PanacheRepository<Pers
         person.setBirth(row.getLocalDate("birth"));
         person.setEmail(row.getString("email"));
         person.setPassword(row.getString("password"));
-        person.setActive(row.getBoolean("active_flag"));
+        person.setActive(row.getBoolean("active"));
         return person;
+    }
+
+    public Uni<Integer> updateMap(Person person) {
+        person.updatedBy();
+        return Panache.withTransaction(() -> update("map_data = ?1 where id = ?2", toDecorator.decorate(person).getMapData(), person.getId()));
     }
 }

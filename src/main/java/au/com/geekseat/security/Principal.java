@@ -1,8 +1,11 @@
 package au.com.geekseat.security;
 
 import au.com.geekseat.helper.Utility;
+import au.com.geekseat.model.Gender;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Principal {
@@ -10,33 +13,39 @@ public class Principal {
     private Long id;
     private String name;
     private String email;
+    private Gender gender;
+    private Map<String, Object> map = new HashMap<>();
     private Set<String> roles;
     private List<String> states;
     private boolean administrator;
     private String token;
 
-    public static final Principal System = new Principal(null, null, null, null, null, false);
+    public static final Principal System = new Principal(null, null, null, null, null, null, null, false);
 
-    public Principal(Long id, String name, String email, Set<String> roles, List<String> states, boolean administrator) {
+    public Principal(Long id, String name, String email, Map<String, Object> map, Gender gender, Set<String> roles, List<String> states, boolean administrator) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.gender = gender;
+        this.map = map;
         this.roles = roles;
         this.states = states;
         this.administrator = administrator;
     }
 
-    public Principal(Long id, String firstName, String lastName, String email, Set<String> roles, List<String> states, boolean administrator) {
+    public Principal(Long id, String firstName, String lastName, String email, Map<String, Object> map, Gender gender, Set<String> roles, List<String> states, boolean administrator) {
         this.id = id;
         this.name = Utility.strip(Utility.stringify(firstName) + " " + Utility.stringify(lastName));
         this.email = email;
+        this.gender = gender;
+        this.map = map;
         this.roles = roles;
         this.states = states;
         this.administrator = administrator;
     }
 
     public Principal essence() {
-        return new Principal(this.id, this.name, this.email, this.roles, this.states, this.administrator);
+        return new Principal(this.id, this.name, this.email, this.map, this.gender, this.roles, this.states, this.administrator);
     }
 
     public Long getId() {
@@ -61,6 +70,22 @@ public class Principal {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, Object> map) {
+        this.map = map;
     }
 
     public Set<String> getRoles() {
