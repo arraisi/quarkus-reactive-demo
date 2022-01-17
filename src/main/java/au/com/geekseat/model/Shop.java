@@ -2,17 +2,13 @@ package au.com.geekseat.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.EAGER;
-
 @Entity
 @Table(name = "shop")
 public class Shop extends BaseModel {
-    private Integer invoiceNumber;
     private Integer quantity;
     private Boolean active = true;
 
-    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -20,8 +16,7 @@ public class Shop extends BaseModel {
     @JoinColumn(name = "person_id")
     private Person person;
 
-    public Shop(Integer invoiceNumber, Integer quantity, Boolean active, Product product, Person person) {
-        this.invoiceNumber = invoiceNumber;
+    public Shop(Integer quantity, Boolean active, Product product, Person person) {
         this.quantity = quantity;
         this.active = active;
         this.product = product;
@@ -29,14 +24,6 @@ public class Shop extends BaseModel {
     }
 
     public Shop() {
-    }
-
-    public Integer getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(Integer invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
     }
 
     public Integer getQuantity() {

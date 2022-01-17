@@ -49,9 +49,9 @@ values (2, 'Product-002', 2, 100);
 insert into product(id, name, quantity, price)
 values (3, 'Product-003', 1, 200);
 
-insert into shop(id, invoiceNumber, quantity, product_id, person_id, active)
-VALUES (1, 1001, 3, 1, 1, true);
-insert into shop(id, invoiceNumber, quantity, product_id, person_id, active)
-VALUES (2, 1001, 2, 2, 1, true);
-insert into shop(id, invoiceNumber, quantity, product_id, person_id, active)
-VALUES (3, 1001, 1, 3, 1, true);
+insert into shop(id, quantity, product_id, person_id, active)
+VALUES (1, 3, 1, 1, true);
+insert into shop(id, quantity, product_id, person_id, active)
+VALUES (2, 2, 2, 1, true);
+insert into shop(id, quantity, product_id, person_id, active)
+VALUES (3, 1, 3, 1, true);

@@ -1,5 +1,6 @@
 package au.com.geekseat.controller;
 
+import au.com.geekseat.model.Person;
 import au.com.geekseat.model.Shop;
 import au.com.geekseat.service.PocketService;
 import au.com.geekseat.service.ProductService;
@@ -20,6 +21,7 @@ import java.util.List;
 import static au.com.geekseat.service.ShopService.toDecorator;
 import static io.quarkus.hibernate.reactive.panache.Panache.withTransaction;
 import static javax.ws.rs.core.Response.*;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Path("/shop")
 @ApplicationScoped
@@ -40,13 +42,27 @@ public class ShopController {
     }
 
     @PUT
-    @Path("/checkout")
-    public Uni<Response> checkout() {
+    @Path("/checkout/dummy")
+    public Uni<Response> checkoutDummy(Person person) {
         return withTransaction(() -> Uni.combine().all()
                 .unis(
                         productService.checkoutProduct(),
-                        pocketService.updatePocket(),
+                        pocketService.updatePocket(person),
                         shopService.updateStatus()
+                ).asTuple())
+                .map(objects -> ok(objects).build())
+                .onFailure()
+                .recoverWithItem((e) -> serverError().entity(e.getMessage()).build());
+    }
+
+    // TODO
+    @PUT
+    @Path("/checkout")
+    public Uni<Response> checkout(Person person) {
+        return withTransaction(() -> Uni.combine().all()
+                .unis(
+                        shopService.checkout(person),
+                        pocketService.updatePocket(person)
                 ).asTuple())
                 .map(objects -> ok(objects).build())
                 .onFailure()
@@ -58,6 +74,25 @@ public class ShopController {
         shop.createdBy();
         return Panache.withTransaction(() -> shopService.persist(toDecorator.decorate(shop)))
                 .map(response -> created(URI.create("/person" + response.getId())).build());
+    }
+
+    @PUT
+    @Path("/qty")
+    public Uni<Response> updateQty(Shop shop) {
+        if (shop.getId() == null) {
+            return Uni.createFrom().item(status(BAD_REQUEST))
+                    .map(Response.ResponseBuilder::build);
+        }
+        return shopService.updateQty(shop)
+                .map(integer -> ok(integer).build());
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Uni<Response> delete(@PathParam("id") Long id) {
+        return Panache.withTransaction(() -> shopService.deleteById(id)
+                .map(deleted -> deleted ? noContent() : notModified())
+                .map(ResponseBuilder::build));
     }
 
     @GET

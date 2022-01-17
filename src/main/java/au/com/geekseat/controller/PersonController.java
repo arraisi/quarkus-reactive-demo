@@ -88,7 +88,7 @@ public class PersonController {
     @GET
     @Path("/list/active")
     public Multi<Person> listActive() {
-        return personService.list("active_flag", true)
+        return personService.list("active", true)
                 .onItem().transformToMulti(row -> Multi.createFrom().iterable(row))
                 .map(fromDecorator::decorate);
     }

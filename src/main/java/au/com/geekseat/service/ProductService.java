@@ -2,6 +2,7 @@ package au.com.geekseat.service;
 
 import au.com.geekseat.helper.Decorator;
 import au.com.geekseat.model.Product;
+import au.com.geekseat.model.Shop;
 import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Uni;
@@ -46,6 +47,18 @@ public class ProductService implements PanacheRepository<Product> {
                         persist(product);
                     });
                     return products;
+                });
+    }
+
+    // TODO
+    public Uni<Uni<Product>> checkout(Shop shop) {
+        return findById(shop.getId())
+                .map(product -> {
+                    if (product.getQuantity() < shop.getQuantity()) {
+                        throw new RuntimeException(product.getName() + " is out of stock");
+                    }
+                    product.setQuantity(product.getQuantity() - 1);
+                    return persist(product);
                 });
     }
 
