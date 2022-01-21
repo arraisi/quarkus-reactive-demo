@@ -9,8 +9,8 @@ quarkus:
       access-control-allow-credentials: true
   datasource:
     db-kind: mysql
-    username: quarkususer
-    password: secret
+    username: root
+    password: root
     jdbc: false
     reactive:
       url: mysql://localhost:3306/quarkus

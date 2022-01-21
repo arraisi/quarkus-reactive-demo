@@ -6,11 +6,9 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 
 ## Setup Database
     ```
-    docker run --rm --name \
+    docker run -d --name \
     quarkus-db \
     -e MYSQL_DATABASE=quarkus \
-    -e MYSQL_USER=quarkususer \
-    -e MYSQL_PASSWORD=secret \
     -e MYSQL_ROOT_PASSWORD=root \
     -v "$PWD/mariadb-data:/var/lib/mysql" \
     -p 127.0.0.1:3306:3306 \

@@ -50,16 +50,16 @@ public class ProductService implements PanacheRepository<Product> {
                 });
     }
 
-    // TODO
-    public Uni<Uni<Product>> checkout(Shop shop) {
-        return findById(shop.getId())
-                .map(product -> {
-                    if (product.getQuantity() < shop.getQuantity()) {
-                        throw new RuntimeException(product.getName() + " is out of stock");
-                    }
-                    product.setQuantity(product.getQuantity() - 1);
-                    return persist(product);
-                });
+
+    public Uni<Product> checkout(Shop shop) {
+        Uni<Product> productUni = findById(shop.getId());
+        return productUni.map(product -> {
+            if (product.getQuantity() < shop.getQuantity()) {
+                throw new RuntimeException(product.getName() + " is out of stock");
+            }
+            product.setQuantity(product.getQuantity() - 1);
+            return product;
+        });
     }
 
     public Uni<Response> update(Product product) {

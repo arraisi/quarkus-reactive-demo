@@ -42,21 +42,6 @@ public class ShopController {
     }
 
     @PUT
-    @Path("/checkout/dummy")
-    public Uni<Response> checkoutDummy(Person person) {
-        return withTransaction(() -> Uni.combine().all()
-                .unis(
-                        productService.checkoutProduct(),
-                        pocketService.updatePocket(person),
-                        shopService.updateStatus()
-                ).asTuple())
-                .map(objects -> ok(objects).build())
-                .onFailure()
-                .recoverWithItem((e) -> serverError().entity(e.getMessage()).build());
-    }
-
-    // TODO
-    @PUT
     @Path("/checkout")
     public Uni<Response> checkout(Person person) {
         return withTransaction(() -> Uni.combine().all()
